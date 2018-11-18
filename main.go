@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/czerwonk/bird_exporter/protocol"
+	"github.com/lightwirelimited/bird_exporter/protocol"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"

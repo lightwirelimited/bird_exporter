@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	"github.com/czerwonk/bird_exporter/protocol"
+	"github.com/lightwirelimited/bird_exporter/protocol"
 )
 
 type DefaultLabelStrategy struct {

@@ -1,6 +1,6 @@
 package metrics
 
-import "github.com/czerwonk/bird_exporter/protocol"
+import "github.com/lightwirelimited/bird_exporter/protocol"
 
 type LegacyLabelStrategy struct {
 }

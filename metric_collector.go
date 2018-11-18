@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/czerwonk/bird_exporter/client"
-	"github.com/czerwonk/bird_exporter/metrics"
-	"github.com/czerwonk/bird_exporter/protocol"
+	"github.com/lightwirelimited/bird_exporter/client"
+	"github.com/lightwirelimited/bird_exporter/metrics"
+	"github.com/lightwirelimited/bird_exporter/protocol"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 )

@@ -2,8 +2,8 @@ package client
 
 import (
 	"fmt"
-	"github.com/czerwonk/bird_exporter/parser"
-	"github.com/czerwonk/bird_exporter/protocol"
+	"github.com/lightwirelimited/bird_exporter/parser"
+	"github.com/lightwirelimited/bird_exporter/protocol"
 	"github.com/czerwonk/bird_socket"
 )
 
