@@ -19,6 +19,7 @@ var (
 	uptimeRegex      *regexp.Regexp
 	routeChangeRegex *regexp.Regexp
 	channelRegex     *regexp.Regexp
+	routeLimitRegex  *regexp.Regexp
 )
 
 type context struct {
@@ -35,6 +36,8 @@ func init() {
 	uptimeRegex = regexp.MustCompile(`^(?:((\d+):(\d{2}):(\d{2}))|(\d+)|(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}))$`)
 	routeChangeRegex = regexp.MustCompile(`(Import|Export) (updates|withdraws):\s+(\d+|---)\s+(\d+|---)\s+(\d+|---)\s+(\d+|---)\s+(\d+|---)\s*`)
 	channelRegex = regexp.MustCompile(`Channel ipv(4|6)`)
+	routeLimitRegex = regexp.MustCompile(`^\s+(Import|Export) limit:\s+(\d+)`)
+	//routeLimitRegex = regexp.MustCompile(`^\s+(Import|Export)limit`)
 }
 
 // Parser parses bird output and returns protocol.Protocol structs
@@ -50,6 +53,7 @@ func ParseProtocols(data []byte, ipVersion string) []*protocol.Protocol {
 		parseLineForChannel,
 		parseLineForRoutes,
 		parseLineForRouteChanges,
+		parseLineForRouteLimit,
 	}
 
 	for scanner.Scan() {
@@ -236,6 +240,26 @@ func parseLineForRouteChanges(c *context) {
 	x.Filtered = parseRouteChangeValue(match[5])
 	x.Ignored = parseRouteChangeValue(match[6])
 	x.Accepted = parseRouteChangeValue(match[7])
+
+	c.handled = true
+}
+
+func parseLineForRouteLimit(c *context) {
+	if c.current == nil {
+		return
+	}
+
+	match := routeLimitRegex.FindStringSubmatch(c.line)
+	if match == nil {
+		return
+	}
+
+	if match[1] == "Import" {
+		c.current.ImportLimit = parseInt(match[2])
+	} else {
+		c.current.ExportLimit = parseInt(match[2])
+	}
+
 
 	c.handled = true
 }

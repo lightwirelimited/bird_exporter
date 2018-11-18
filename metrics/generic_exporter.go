@@ -33,6 +33,8 @@ type GenericProtocolMetricExporter struct {
 	withdrawsExportFilterCountDesc  *prometheus.Desc
 	withdrawsExportIgnoreCountDesc  *prometheus.Desc
 	withdrawsExportAcceptCountDesc  *prometheus.Desc
+	importLimitDesc                 *prometheus.Desc
+	exportLimitDesc                 *prometheus.Desc
 }
 
 func NewGenericProtocolMetricExporter(prefix string, newNaming bool, labelStrategy LabelStrategy) *GenericProtocolMetricExporter {
@@ -79,6 +81,8 @@ func (m *GenericProtocolMetricExporter) initDesc(prefix string, newNaming bool) 
 	m.withdrawsExportFilterCountDesc = prometheus.NewDesc(prefix+"_changes_withdraw_export_filter_count", "Number of outgoing withdraws being filtered", labels, nil)
 	m.withdrawsExportRejectCountDesc = prometheus.NewDesc(prefix+"_changes_withdraw_export_reject_count", "Number of outgoing withdraws being rejected", labels, nil)
 	m.withdrawsExportReceiveCountDesc = prometheus.NewDesc(prefix+"_changes_withdraw_export_receive_count", "Number of outgoing withdraws", labels, nil)
+	m.importLimitDesc = prometheus.NewDesc(prefix+"_route_import_limit", "Maximum routes allowed to Import", labels, nil)
+	m.exportLimitDesc = prometheus.NewDesc(prefix+"_route_export_limit", "Maximum routes allowed to Export", labels, nil)
 }
 
 func (m *GenericProtocolMetricExporter) Describe(ch chan<- *prometheus.Desc) {
@@ -108,6 +112,8 @@ func (m *GenericProtocolMetricExporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- m.withdrawsExportFilterCountDesc
 	ch <- m.withdrawsExportRejectCountDesc
 	ch <- m.withdrawsExportReceiveCountDesc
+	ch <- m.importLimitDesc
+	ch <- m.exportLimitDesc
 }
 
 func (m *GenericProtocolMetricExporter) Export(p *protocol.Protocol, ch chan<- prometheus.Metric) {
@@ -138,4 +144,6 @@ func (m *GenericProtocolMetricExporter) Export(p *protocol.Protocol, ch chan<- p
 	ch <- prometheus.MustNewConstMetric(m.withdrawsExportFilterCountDesc, prometheus.GaugeValue, float64(p.ExportWithdraws.Filtered), l...)
 	ch <- prometheus.MustNewConstMetric(m.withdrawsExportAcceptCountDesc, prometheus.GaugeValue, float64(p.ExportWithdraws.Accepted), l...)
 	ch <- prometheus.MustNewConstMetric(m.withdrawsExportIgnoreCountDesc, prometheus.GaugeValue, float64(p.ExportWithdraws.Ignored), l...)
+	ch <- prometheus.MustNewConstMetric(m.importLimitDesc, prometheus.GaugeValue, float64(p.ImportLimit), l...)
+	ch <- prometheus.MustNewConstMetric(m.exportLimitDesc, prometheus.GaugeValue, float64(p.ExportLimit), l...)
 }

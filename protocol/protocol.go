@@ -18,6 +18,8 @@ type Protocol struct {
 	Exported        int64
 	Filtered        int64
 	Preferred       int64
+	ImportLimit     int64
+	ExportLimit     int64
 	Uptime          int
 	Attributes      map[string]float64
 	ImportUpdates   RouteChangeCount
@@ -35,5 +37,5 @@ type RouteChangeCount struct {
 }
 
 func NewProtocol(name string, proto int, ipVersion string, uptime int) *Protocol {
-	return &Protocol{Name: name, Proto: proto, IpVersion: ipVersion, Uptime: uptime, Attributes: make(map[string]float64)}
+	return &Protocol{Name: name, Proto: proto, IpVersion: ipVersion, ImportLimit: -1, ExportLimit: -1, Uptime: uptime, Attributes: make(map[string]float64)}
 }
